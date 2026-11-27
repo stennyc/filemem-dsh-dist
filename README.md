@@ -44,6 +44,41 @@ shipped in the package) mounts the plugin: 14-face tool surface + L1 handoff
 + the settings panel. Store root defaults to `~/.dsh/filemem` (per-user
 isolated).
 
+## On a phone (dsh-Go, the 0.2.2-rc.1 host generation)
+
+The phone engine ships the rc.1 DSH generation, which has no `llm` inject
+token. Use the **rc1host** build (the `filemem-dsh-0.1.0-rc1host-*` tarballs
+on this branch): it declares only the tokens rc.1 resolves, and every
+LLM-dependent face (the L1 handoff summary, the L2 reclassify, the L4
+rescore) takes its coded deterministic floor there. The data plane (the
+14-face tool surface) and the guidance section are fully active — verified
+on a real rc.1 host.
+
+The builds are **self-contained**: the two runtime deps are inlined into
+the bundle, so no registry resolution happens at install (the stale
+`schemastery` constraint that broke registry installs is also fixed).
+
+1. Fetch the tarball for your phone architecture (arm64 on common phones)
+   and verify it against this branch's `SHA256SUMS`:
+   ```sh
+   curl -fL -O https://raw.githubusercontent.com/stennyc/filemem-dsh-dist/releases/filemem-dsh-0.1.0-rc1host-linux-arm64.tar.gz
+   ```
+2. Get the folder into the phone's built-in Linux environment (any of the
+   three ways in the dsh-Go docs: the agent writes it, `curl`/`git clone`
+   in the App's terminal, or copy to the phone's Downloads + enable
+   "access phone files" then `cp -r`):
+   ```sh
+   tar -xzf filemem-dsh-0.1.0-rc1host-linux-arm64.tar.gz
+   cp -r filemem-dsh-0.1.0-rc1host /root/.dsh/dsh-go/plugins/filemem-rc1
+   ```
+3. Install it into the App's web profile (takes effect without a restart):
+   ```sh
+   dsh plugin --profile web add /root/.dsh/dsh-go/plugins/filemem-rc1
+   ```
+
+Desktop hosts on the rc.5 generation: use the plain `filemem-dsh-0.1.0-*`
+tarballs (the full LLM faces are active there).
+
 ## Configure
 All knobs are the volatile config fields restated in the package's
 `cordis.patch.yml` (injected into the active profile row, patch-replaces-whole-config
