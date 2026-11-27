@@ -44,3 +44,13 @@
   `deleted: true` and the row was physically gone (the dry-run leg had
   only ever been spelled on the predicate leg). The selftest now covers
   both legs of the single-id path.
+- **rc1host retrieve / handoff fix (owner incident 2026-11-27 #6):** on
+  the rc.1-generation host the `llm` property ACCESS throws (`cannot get
+  property "llm" without inject` — the reflect accessor does not return
+  undefined for an undeclared token), so the previous `!ctx?.llm` value
+  guard blew up before it could reach the deterministic floor. The
+  single choke point (`oneShotLLM`) now wraps the access itself
+  (the exported `llmFace`); every LLM face (the L1 handoff summary,
+  the L2 reclassify, the L4 retrieve rescore) degrades to its coded
+  floor on rc1host. Verified with a throwing-accessor simulation
+  harness against the real tool executors.
