@@ -26,3 +26,12 @@
   install.sh / install.ps1; the rc1host variant selects
   `install.sh 0.1.0-rc1host`); the GitHub release page carries the same
   artifacts as a cosmetic extra.
+
+- **Phone-ergonomics pass (owner phone feedback, same day):** the tarball
+  top-level directory is unified to `filemem-dsh-<version>` across variants
+  (the marker stays on the archive file name); `install.sh` gained the
+  variant flag (`install.sh rc1host`) plus host-generation auto-detection;
+  `install-node.mjs` is the pure-node fetch+verify+extract installer for
+  proot userlands without curl/wget (node 24 preinstalled on the phone);
+  the README carries the pnpm peer-warning note and the dsh-Go restart
+  semantics (kill the engine process, the App supervisor relaunches it).
