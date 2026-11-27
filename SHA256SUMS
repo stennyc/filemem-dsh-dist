@@ -1,7 +1,7 @@
-2eb1cfea0d3bba30fd9029c37ddb02e0a0db24b1b3e8a19deb63d7fd5294398b  filemem-dsh-0.1.0-darwin-arm64.tar.gz
-e35ab1cbb071ffba7c17633b50a2c5d94a049ede985284c3059272b172179901  filemem-dsh-0.1.0-darwin-x64.tar.gz
-8640c37477bbb3a324f17501e8387c40ba91709ca50c16b7d1ee89a445f9e18a  filemem-dsh-0.1.0-linux-arm64.tar.gz
-f793c9146e0e8c90899475634e11d126c43adaa1a36e395eb59e3ad73563a9d9  filemem-dsh-0.1.0-rc1host-linux-arm64.tar.gz
-bd3ae945ed3e7f702f5dd72c8947916e4bb10925432c4b55394dddc143b7a467  filemem-dsh-0.1.0-linux-x64.tar.gz
-1ccc2520d2a742703ade58e5adef0179a2fb5591939827a5bac9fd9d131ee8ea  filemem-dsh-0.1.0-rc1host-linux-x64.tar.gz
-caef0d2737f98bde128751638db4d6887fb91d693b345793c963c433f48b3d69  filemem-dsh-0.1.0-windows-x64.tar.gz
+bd63027bfb386b4dcf7a2efb30b3ba1738312e25b241b608a11d30de5a767a9b  filemem-dsh-0.1.0-darwin-arm64.tar.gz
+111c1df5f79c77d69006d947437f5712d2da142f84251a9bcd43760da5d22629  filemem-dsh-0.1.0-darwin-x64.tar.gz
+6f7a61df4b1d5643434855861b7263de547e3f72e67b2f31edcaf4fa7696433b  filemem-dsh-0.1.0-linux-arm64.tar.gz
+0711462008b99c2b9f865f475b1675d70ba1ac36667880632c9dbeb6af0a01f4  filemem-dsh-0.1.0-rc1host-linux-arm64.tar.gz
+42f0fc38b9a0eb341ef43f03d7ae090960b7212950a2776986f447fb598bab3a  filemem-dsh-0.1.0-linux-x64.tar.gz
+c4bf370ef7d6f5074197bdd8c8a2f347935d6014ab6da2e35c47633ed5074074  filemem-dsh-0.1.0-rc1host-linux-x64.tar.gz
+d868097b14c361e6ad1f737ce9b02cfccfc5084a1cbfc92c21103aaa5aac1516  filemem-dsh-0.1.0-windows-x64.tar.gz
