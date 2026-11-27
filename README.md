@@ -74,39 +74,48 @@ defaults to `~/.dsh/filemem` (per-user isolated).
 
 ## On a phone (dsh-Go, the 0.2.2-rc.1 host generation)
 
-The phone engine ships the rc.1 DSH generation, which has no `llm` inject
-token. Use the **rc1host** build: it declares only the tokens rc.1 resolves,
-and every LLM-dependent face (the L1 handoff summary, the L2 reclassify,
-the L4 rescore) takes its coded deterministic floor there. The data plane
-(the 14-face tool surface) and the guidance section are fully active —
-verified on a real rc.1 host.
+The phone engine ships the rc.1 DSH generation. **Correction (2026-11-27,
+supercompress session ruling):** rc.1 DOES ship `@deepseek-ai/dsh-llm`
+(registers the `llm` token) + `dsh-token-meter` as standard services — the
+earlier "rc.1 has no `llm` token" claim was unverified/wrong (verified by
+downloading the 0.2.2-rc.1 registry packages). Use the **rc1host** build:
+from 0.1.1 it declares the FULL inject face (`llm` included), so every
+LLM-dependent face (the L1 handoff summary, the L2 reclassify, the L4
+rescore) runs on the phone when the profile resolves `ctx.llm`; the coded
+deterministic floors + the route-d model back-fill hold when a face is
+absent. The data plane (the 14-face tool surface) and the guidance section
+are fully active — verified on a real rc.1 host.
 
-**LLM faces on the phone — what "no LLM" actually means (the 2026-11-27
-fixes):** the rc.1 host does not offer the plugin its LLM channel (the
-`ctx.llm` inject token), so the plugin's own LLM calls degrade to the
-floors above. But the LLM work is NOT lost: **route d** — when
-`filemem_handoff_extract` returns its deterministic floor, the response
-carries a `model_directive`: the calling agent (the App's own model,
-running on the App's own provider) may author the handoff summary and
-back-fill it through the existing `filemem_llm_result` face (`op:
-"handoff_summary"`) — the pending handoff row upgrades to `llm_used: true`
-with no host LLM API and no key management. The same floor + directive
-posture also protects the `filemem_retrieve` L4 rescore and the
-`filemem_write` L2 reclassify passes (their property-access guards return
-the deterministic result instead of throwing). If a future host
-generation (rc.5+) ships the `llm` token, the plain full build re-enables
-the host-side LLM polish automatically — nothing to reconfigure.
+> **All-or-nothing caveat (verify on-device after install):** the static
+> `inject` list is the host's activation gate — if the phone's rc.1
+> profile does NOT resolve `llm`, the whole plugin stays inactive (worse
+> than the 0.1.0 floor build). If that happens, fall back to the 0.1.0
+> rc1host tarball (tools-only inject, still on the releases branch).
+
+**When a face is absent — the floors + route d (the 2026-11-27 fixes):**
+if the phone profile does NOT resolve `ctx.llm` (the all-or-nothing gate
+falls through) or the provider is unconfigured, the plugin's own LLM calls
+degrade to the coded floors above — and the LLM work is still NOT lost:
+**route d** — when `filemem_handoff_extract` returns its deterministic
+floor, the response carries a `model_directive`: the calling agent (the
+App's own model, running on the App's own provider) may author the
+handoff summary and back-fill it through the existing `filemem_llm_result`
+face (`op: "handoff_summary"`) — the pending handoff row upgrades to
+`llm_used: true` with no host LLM API and no key management. The same
+floor + directive posture also protects the `filemem_retrieve` L4 rescore
+and the `filemem_write` L2 reclassify passes (their property-access
+guards return the deterministic result instead of throwing).
 
 The steps (all in the App's "terminal" page):
 
 ```sh
 # 1. get the tarball (proot has no curl/wget — use the node one-liner):
-node -e "fetch('https://raw.githubusercontent.com/stennyc/filemem-dsh-dist/releases/filemem-dsh-0.1.0-rc1host-linux-arm64.tar.gz').then(r=>r.arrayBuffer()).then(b=>require('fs').writeFileSync('/tmp/fm.tar.gz', Buffer.from(b)))"
+node -e "fetch('https://raw.githubusercontent.com/stennyc/filemem-dsh-dist/releases/filemem-dsh-0.1.1-rc1host-linux-arm64.tar.gz').then(r=>r.arrayBuffer()).then(b=>require('fs').writeFileSync('/tmp/fm.tar.gz', Buffer.from(b)))"
 
 # 2. extract + place it under the plugins directory (the directory name is
-#    filemem-dsh-0.1.0 — no variant suffix):
+#    filemem-dsh-0.1.1 — no variant suffix):
 tar -xzf /tmp/fm.tar.gz -C /tmp
-cp -r /tmp/filemem-dsh-0.1.0 /root/.dsh/dsh-go/plugins/filemem-rc1
+cp -r /tmp/filemem-dsh-0.1.1 /root/.dsh/dsh-go/plugins/filemem-rc1
 
 # 3. install into the profile the App's engine runs (usually `web` — the
 #    App boots its engine with that profile; check yours with
@@ -120,7 +129,8 @@ dsh plugin --profile web add /root/.dsh/dsh-go/plugins/filemem-rc1
 ```
 
 Desktop hosts on the rc.5 generation: use the plain `filemem-dsh-<version>-*`
-tarballs (the full LLM faces are active there).
+tarballs (the full LLM faces are active there — same face the 0.1.1+
+rc1host build declares now).
 
 ## Configure
 All knobs are the volatile config fields restated in the package's

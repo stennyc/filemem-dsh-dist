@@ -62,6 +62,27 @@
   (the pre-existing auto_face / repeat_guard / c5 / workspace_gate drift
   fails identically at the untouched HEAD).
 
+## 0.1.1
+
+- **The rc1host build declares the FULL inject face (owner correction
+  2026-11-27, from the supercompress session):** the earlier claim that
+  the rc.1 host generation lacks the `llm` inject token was UNVERIFIED
+  and wrong — downloading the 0.2.2-rc.1 registry packages shows rc.1
+  ships `@deepseek-ai/dsh-llm` (registers the `llm` token, index.js
+  L1816) + `@deepseek-ai/dsh-token-meter` (the `tokenMeter` token, L800)
+  as standard services. The 0.1.1 rc1host build therefore declares
+  `inject = ["llm", "tools", "systemPrompt"]` (identical to the full
+  build): on the phone, every LLM face (the L1 handoff summary, the L2
+  reclassify, the L4 rescore) runs when the profile resolves `ctx.llm` —
+  no host upgrade needed. The coded deterministic floors + the route-d
+  model back-fill remain the backstops when a face is absent.
+- **CAVEAT (verify on-device):** the static `inject` list is the host's
+  all-or-nothing activation gate — if the phone's rc.1 profile does not
+  resolve `llm`, the whole plugin stays inactive. Fallback: the 0.1.0
+  rc1host tarballs (tools-only inject) remain on the releases branch.
+- The pool-hygiene catch guards (host-frame quarantine + the
+  question-shape skips, the 2026-11-27 phone incident) and the route-d
+  tool descriptions ship in this line as well.
 ## 0.1.0 — 2026-11-27
 - First public source-free build: stripped Go data-plane daemon + minified
   JS shell. No .go / .ts source ships in any artifact (the packaging step

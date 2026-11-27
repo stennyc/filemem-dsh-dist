@@ -40,7 +40,11 @@ if [ -z "$ARG" ] && command -v dsh >/dev/null 2>&1; then
   if [ -n "$HOSTV" ]; then
     RCNUM="${HOSTV##*.}"
     # an rc number below 5 = the rc.1-generation host (the dsh-Go phone
-    # engine): the full build's `llm` inject token does not resolve there.
+    # engine): the rc1host variant carries the rc.1-generation engines gate
+    # (the full build's `engines.dsh` range does not admit the 0.2.2-rc.1
+    # line). Since 0.1.1 the rc1host build declares the SAME inject face as
+    # the full build (the `llm` token included — the rc.1 host ships
+    # dsh-llm; the 0.1.0 tools-only inject was the unverified-era floor).
     if [ "$RCNUM" -lt 5 ]; then VARIANT="rc1host"; fi
   fi
 fi
