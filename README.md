@@ -80,6 +80,22 @@ the L4 rescore) takes its coded deterministic floor there. The data plane
 (the 14-face tool surface) and the guidance section are fully active —
 verified on a real rc.1 host.
 
+**LLM faces on the phone — what "no LLM" actually means (the 2026-11-27
+fixes):** the rc.1 host does not offer the plugin its LLM channel (the
+`ctx.llm` inject token), so the plugin's own LLM calls degrade to the
+floors above. But the LLM work is NOT lost: **route d** — when
+`filemem_handoff_extract` returns its deterministic floor, the response
+carries a `model_directive`: the calling agent (the App's own model,
+running on the App's own provider) may author the handoff summary and
+back-fill it through the existing `filemem_llm_result` face (`op:
+"handoff_summary"`) — the pending handoff row upgrades to `llm_used: true`
+with no host LLM API and no key management. The same floor + directive
+posture also protects the `filemem_retrieve` L4 rescore and the
+`filemem_write` L2 reclassify passes (their property-access guards return
+the deterministic result instead of throwing). If a future host
+generation (rc.5+) ships the `llm` token, the plain full build re-enables
+the host-side LLM polish automatically — nothing to reconfigure.
+
 The steps (all in the App's "terminal" page):
 
 ```sh

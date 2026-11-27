@@ -54,3 +54,15 @@
   the L2 reclassify, the L4 retrieve rescore) degrades to its coded
   floor on rc1host. Verified with a throwing-accessor simulation
   harness against the real tool executors.
+- **Route d (owner ruling 2026-11-27): the model-issued LLM back-fill.**
+  When the host LLM face is unavailable (the rc1host hosts: no `llm`
+  inject token; the full hosts: a transient LLM miss), the
+  `filemem_handoff_extract` floor response carries a `model_directive`:
+  the calling model authors the handoff summary itself and back-fills it
+  via the existing `filemem_llm_result op=handoff_summary` face — the Go
+  data plane upgrades the pending handoff row and stamps `llm_used=true`.
+  No host LLM API and no key management; any host generation. The
+  tool-surface descriptions (the `handoff_extract` + `llm_result` faces)
+  spell the channel so the model knows it before it ever hits the floor.
+  Verified end-to-end under a throwing-accessor rc.1 simulation (floor
+  + directive -> model back-fill -> the `llm_used=true` row in the pool).
