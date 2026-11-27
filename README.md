@@ -1,8 +1,9 @@
-# filemem-dsh (public build)
+# 中枢省 (filemem-dsh, public build)
 
-Cross-session file memory for the DSH agent: a Go data-plane daemon (persistent
-memory pool, auto-injection, L1 handoff, the shared-memory faces) behind a thin
-minified JS shell. This distribution is the **source-free public build** — the
+The DSH agent's affairs core (the 中枢省): a Go data-plane daemon (the
+persistent memory pool, auto-injection, L1 handoff, the plans + scheduled
+faces, the shared-memory faces) behind a thin minified JS shell — 记 / 办 / 传 / 定
+(the records, the execution, the hand-offs, the adjudication). This distribution is the **source-free public build** — the
 daemon ships as a stripped native binary and the shell as minified modules.
 Development source is not distributed.
 

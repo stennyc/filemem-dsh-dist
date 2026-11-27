@@ -66,3 +66,12 @@
   spell the channel so the model knows it before it ever hits the floor.
   Verified end-to-end under a throwing-accessor rc.1 simulation (floor
   + directive -> model back-fill -> the `llm_used=true` row in the pool).
+- **Naming (owner ruling 2026-11-27): the display name is now 中枢省**
+  (filemem-dsh stays the engineering anchor — the package / tool prefixes /
+  daemon name / the store dir are unchanged, so installed phones migrate
+  nothing). 中枢省 (the edict-drafting core organ) is chosen over
+  memory-only names: the system is the agent's affairs hub (the records,
+  the execution, the hand-offs, the adjudication, the cross-device
+  consensus), not a memory store. The Chinese display surfaces (the
+  locale meta title + the README) carry it; the English package
+  descriptions keep the engineering framing.
