@@ -1,5 +1,67 @@
 # Changelog
 
+## Unreleased
+- **Pitfall markers for resolved mistake memories (owner 2026-11-27
+  「消解即坑位」ruling, D-LESSON-2 — amends the ②c "resolved/stale
+  → relevance-gated" clause)**: a CONFIRMED lesson that is later
+  stale / resolved / superseded now stays on the per-turn lesson lane
+  as the compact 坑位 marker instead of dropping out — rendered as
+  `· 坑位（已修正，别再犯）: 被 <corrected_by> 修正/替代 — <content>`
+  + the tool-guidance line (point at the correction row via
+  `filemem_read`, the `filemem_retrieve` fallback when the link target
+  is swept). Tiers: the active open mistakes first, the pitfall ones
+  after (both under the `injection.lesson.perturn_max` cap). The dream
+  contradiction verdict now stamps the structured correction link
+  (`corrected_by` on the stale row, the `correction_of` reverse marker
+  on the winner — skipped for failure-exempt winners, the ①A red line
+  keeps every LLM touch off a mechanical row). Settled rows and
+  explicitly `valid_until`-expired pitfall rows fold out. The P3
+  replay re-trim mirrors the two-tier admission (the live/replay
+  zero-divergence rule, the lane predicate).
+
+## 0.2.0 — 2026-11-27
+- **First-class `lesson` memory lane (owner 2026-11-27「人会记错，filemem
+  要记错」三判词 ①A/②c/③ + 复盘修复批)**: `lesson` is the 7th
+  first-class type (`memories/lesson.json`) — the mistake / negative-
+  example lane. ①A: the supersede red line keys on the
+  `failure_type` METADATA (mechanical tool-failure rows stay exempt
+  across every face — user supersede, dream merge/contradiction,
+  supersede_confirm), so a bad turn never pollutes durable memory;
+  model-authored lessons keep a normal open→resolved/stale lifecycle.
+  ②c: hybrid delivery — VERIFIED lessons that are global or scoped to
+  the current workspace ride a dedicated per-turn lane (top-N capped
+  by `injection.lesson.perturn_max`, default 4; content never
+  truncated; rides the 0-hit face too); everything else stays
+  relevance-gated (the 人会记错 trust gate). ③: the minimal
+  mechanical surface set (recall pool / supersede / failureFlush /
+  export / scoped-delete / archive / P3 replay re-trim). The
+  mechanical failure_flush lane re-lands on the lesson shard; the LLM
+  reclass face accepts lesson as a target (single + batch prompts,
+  both shell back-fill legs). Golden zero-regression (two
+  design-driven golden updates, byte-stability proven at the binary
+  level) + a reviewer 复盘修复批 (P1-1 red-line gate on the LLM
+  consolidation verdicts, P2-1 catch-floor whitelist, P2-2 replay
+  re-trim predicate, P2-3 hard-row dedup, P3 smalls + the P3-4 TTL
+  posture ruling: default-L1 lessons never TTL-sweep — a long-lived
+  mistake stays in the per-turn lane until lifecycle-folded or
+  owner-deleted; an explicit L0 lesson archives out at its 30-day TTL).
+- **Phone settings card completed (owner 2026-11-27「dsh-go 手机端 filemem
+  设置卡完善」)**: every `Config` schema field now carries its own
+  `description` — a Chinese 「title（hint）」phrase the dsh-Go phone host's
+  generated card (`settings/describe` form) splits into the row title and its
+  one-line hint — plus an `en` locale entry via `.i18n()` for the English UI.
+  The phone card previously fell back to humanized English keys with no hint;
+  it now shows labeled, hinted rows on both the volatile-only projection
+  (relay / bridge fallback) and the full bridge form. The loader plumbing
+  field `client` is `.hidden()` so it no longer renders as a raw JSON row.
+  Web card untouched (its labels come from the shipped client.js dictionaries);
+  the Go data plane and all golden paths untouched.
+  Verified: `tsc` clean, the serialized schema carries 27 described fields
+  (probe of `Config.toJSON()`), every zh hint ≤ 40 runes (no app-side
+  ellipsize), `client_smoke` + `verify-fixes` + the local e2e batteries pass
+  (the pre-existing auto_face / repeat_guard / c5 / workspace_gate drift
+  fails identically at the untouched HEAD).
+
 ## 0.1.0 — 2026-11-27
 - First public source-free build: stripped Go data-plane daemon + minified
   JS shell. No .go / .ts source ships in any artifact (the packaging step
@@ -75,3 +137,22 @@
   consensus), not a memory store. The Chinese display surfaces (the
   locale meta title + the README) carry it; the English package
   descriptions keep the engineering framing.
+- **Pool-hygiene fix (owner phone check 2026-11-27): the auto-catch
+  no longer pollutes the confirmed pool with host frames or user
+  questions.** The phone store had two confirmed noise facts riding the
+  every-round global injection: (a) a runtime-context snapshot (the
+  harness GUI URL / approval-policy / skill-catalog frames — the L0
+  url keyword hit inside the host frame, the whole block was saved and
+  auto-confirmed); (b) the user QUESTION "完成了，这次安装有没有遇到什么
+  问题…" (an ellipsis-terminated question slipped the ?/？ endings). Three
+  guards: the host-frame opener list now includes the DSH harness /
+  dsh-Go runtime frames (Current runtime context / Current DSH / the
+  approval-policy notice / the AGENTS instructions / the skill catalog /
+  the [filemem-memory] self-injection block / the elapsed-time line);
+  a lane-keyword hit inside a question-shaped utterance is SKIPPED (the
+  question shape wins over the keyword, the explainable
+  skipped_interrogative floor); the fact-candidate aperture rejects a
+  terminal ellipsis + the interrogative particles (吗/呢/吧 anywhere;
+  是否/有没有/能不能/为什么/怎么/可否 in the last 10 runes — a negated
+  assertion like "没有遇到任何问题" stays a fact). Selftest covers all
+  four shapes.
