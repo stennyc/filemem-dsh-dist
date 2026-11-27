@@ -1,0 +1,7 @@
+Copyright (c) 2026 Stennyc. All rights reserved.
+
+This package is the public source-free build of filemem-dsh. The native
+daemon (dist/filemem-go) and the minified shell modules are provided as
+compiled artifacts. No source code is distributed with this package, and no
+source license grants beyond this file apply. Redistribution of the compiled
+artifacts is permitted with this license text intact.
