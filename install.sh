@@ -1,13 +1,15 @@
 #!/bin/sh
-# filemem-dsh public installer (unix): download the matching platform tarball
-# from the latest release, verify the checksum, extract. Then follow the
-# README's pnpm step in your DSH profile directory.
+# filemem-dsh public installer (unix): fetch the current platform tarball from
+# the dist repo's releases branch, verify the checksum, extract. Then follow
+# the README's pnpm step in your DSH profile directory.
+# Usage: install.sh [version]   (default: the newest version on the branch)
 set -eu
-API="https://api.github.com"
-REPO="stennyc/filemem-dsh-dist"
-VER=$(curl -fsSL "$API/repos/$REPO/releases/latest" | sed -n 's/.*"tag_name": *"\([^"]*\)".*/\1/p')
-[ -n "$VER" ] || { echo "latest release not found"; exit 1; }
-VER_NUM=${VER#v}
+BASE="https://raw.githubusercontent.com/stennyc/filemem-dsh-dist/releases"
+VER="${1:-}"
+if [ -z "$VER" ]; then
+  VER=$(curl -fsSL "$BASE/SHA256SUMS" | sed -n 's/.*filemem-dsh-\([0-9.]*\)-\(linux-x64\|linux-arm64\|darwin-x64\|darwin-arm64\|windows-x64\)\.tar\.gz.*/\1/p' | sort -uV | tail -1)
+fi
+[ -n "$VER" ] || { echo "no version found on the releases branch"; exit 1; }
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 ARCH=$(uname -m)
 case "$OS-$ARCH" in
@@ -15,11 +17,11 @@ case "$OS-$ARCH" in
   linux-arm64|linux-aarch64) TARGET="linux-arm64" ;;
   darwin-arm64) TARGET="darwin-arm64" ;;
   darwin-x86_64) TARGET="darwin-x64" ;;
-  *) echo "unsupported platform: $OS-$ARCH (build the dev source for your platform)"; exit 1 ;;
+  *) echo "unsupported platform: $OS-$ARCH (the releases branch ships: linux-x64, linux-arm64, darwin-x64, darwin-arm64, windows-x64)"; exit 1 ;;
 esac
-F="filemem-dsh-$VER_NUM-$TARGET.tar.gz"
-curl -fL -o "$F" "$API/repos/$REPO/releases/latest/download/$F"
-curl -fL -o SHA256SUMS "$API/repos/$REPO/releases/latest/download/SHA256SUMS"
+F="filemem-dsh-$VER-$TARGET.tar.gz"
+curl -fL -o "$F" "$BASE/$F"
+curl -fL -o SHA256SUMS "$BASE/SHA256SUMS"
 if command -v sha256sum >/dev/null; then
   grep " $F$" SHA256SUMS | sha256sum -c -
 else
@@ -31,5 +33,5 @@ fi
 tar -xzf "$F"
 rm -f "$F" SHA256SUMS
 echo ""
-echo "extracted: $(pwd)/filemem-dsh-$VER_NUM"
-echo "next: cd <your-dsh-profile-dir> && pnpm add $(pwd)/filemem-dsh-$VER_NUM   (see README.md)"
+echo "extracted: $(pwd)/filemem-dsh-$VER"
+echo "next: cd <your-dsh-profile-dir> && pnpm add $(pwd)/filemem-dsh-$VER   (see README.md)"

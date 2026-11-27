@@ -12,22 +12,37 @@ Development source is not distributed.
 - Node >= 20 to run the shell; the daemon binary is native — no toolchain needed.
 
 ## Install
-1. Download the tarball for your platform from the [latest release](https://github.com/stennyc/filemem-dsh-dist/releases/latest) (or run the bundled installer: `install.sh` / `install.ps1`).
-2. Verify the checksum:
-   ```sh
-   sha256sum -c SHA256SUMS   # Windows: Get-FileHash, see install.ps1
-   ```
-3. Extract, then add the extracted directory as a file: dependency in your DSH
-   profile's `package.json` and install:
-   ```sh
-   cd <your-dsh-profile-dir>
-   pnpm add <path-to-extracted>/filemem-dsh-<version>
-   ```
-   The profile's `pnpm install` resolves the two public runtime deps
-   (`@deepseek-ai/dsh-tools`, `@deepseek-ai/schemastery`) from the registry.
-4. Restart the DSH host. The bundle patch row (`cordis.patch.yml`, shipped in
-   the package) mounts the plugin: 14-face tool surface + L1 handoff + the
-   settings panel. Store root defaults to `~/.dsh/filemem` (per-user isolated).
+One-liner (fetches the matching platform tarball from the dist repo's
+`releases` branch, verifies the checksum, extracts):
+
+```sh
+# unix (the installer lives on the dist repo main branch; it fetches the
+# tarball + SHA256SUMS from the releases branch, verifies, extracts)
+curl -fsSL https://raw.githubusercontent.com/stennyc/filemem-dsh-dist/main/install.sh | sh
+```
+
+```powershell
+# windows
+powershell -c "irm https://raw.githubusercontent.com/stennyc/filemem-dsh-dist/main/install.ps1 | iex"
+```
+
+Manual: download `filemem-dsh-<version>-<platform>.tar.gz` from
+https://github.com/stennyc/filemem-dsh-dist/tree/releases and verify with the
+branch's `SHA256SUMS`, then add the extracted directory as a file: dependency
+in your DSH profile's `package.json` and install:
+
+```sh
+cd <your-dsh-profile-dir>
+pnpm add <path-to-extracted>/filemem-dsh-<version>
+```
+
+The profile's `pnpm install` resolves the two public runtime deps
+(`@deepseek-ai/dsh-tools`, `@deepseek-ai/schemastery`) from the registry.
+
+Finally restart the DSH host. The bundle patch row (`cordis.patch.yml`,
+shipped in the package) mounts the plugin: 14-face tool surface + L1 handoff
++ the settings panel. Store root defaults to `~/.dsh/filemem` (per-user
+isolated).
 
 ## Configure
 All knobs are the volatile config fields restated in the package's
