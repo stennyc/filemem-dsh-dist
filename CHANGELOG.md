@@ -35,3 +35,12 @@
   proot userlands without curl/wget (node 24 preinstalled on the phone);
   the README carries the pnpm peer-warning note and the dsh-Go restart
   semantics (kill the engine process, the App supervisor relaunches it).
+- **Delete-face safety fix (owner incident 2026-11-27):** the single-row
+  delete leg (`id` / `key`) now carries the same dry-run-first posture as
+  the scoped-predicate leg — a call without an explicit `dry_run=false`
+  LOCATES the row and reports it (`found` + home shard(s)) without writing
+  anything; the physical delete only happens on the explicit execute
+  re-call. The incident: a dry-intent single-row delete returned
+  `deleted: true` and the row was physically gone (the dry-run leg had
+  only ever been spelled on the predicate leg). The selftest now covers
+  both legs of the single-id path.
